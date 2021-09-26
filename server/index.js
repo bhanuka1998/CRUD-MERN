@@ -43,8 +43,29 @@ app.get('/read', async (req, res) => {
     })
 });
 
+app.put('/update', async (req, res) => {
+    const newAnimeName = req.body.newAnimeName
+    const id = req.body.id
 
+    try {
+        await AnimeModel.findById(id, (err, updatedAnime) => {
+            updatedAnime.animeName = newAnimeName
+            updatedAnime.save();
+            res.send("Updated");
+        });
+    }
+    catch (err){
+        console.log(err);
+    }
+});
+
+app.delete("/delete/:id", async (req, res) =>{
+    const id = req.params.id;
+    console.log(id);
+    await AnimeModel.findByIdAndRemove(id).exec();
+    res.send("Deleted");
+});
 
 app.listen(3001, () => {
-    console.log("Server is running on port 3000.....");
+    console.log("Server is running on port 3001.....");
 });
